@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Question</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .question {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .answers {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .answer {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .answer:hover {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .emoji-container {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2em;
+            z-index: 10;
+        }
+
+        /* Add smooth transition when emojis appear */
+        @keyframes emojiAnim {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="question">Khánh Đan có dễ thương không?</div>
+
+    <div class="answers">
+        <div class="answer" id="co">Có</div>
+        <div class="answer" id="khong">Không</div>
+    </div>
+
+    <div class="emoji-container" id="emojiContainer"></div>
+
+    <script>
+        // Elements
+        let coButton = document.getElementById('co');
+        let khongButton = document.getElementById('khong');
+        let emojiContainer = document.getElementById('emojiContainer');
+
+        // Clapping sound effect
+        let clappingSound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Replace with a clapping sound URL
+
+        // Function to add multiple emojis when "Có" is clicked
+        coButton.addEventListener('click', function() {
+            // Play clapping sound
+            clappingSound.play();
+
+            // Add 5 to 7 emojis at random positions
+            let emojiCount = Math.floor(Math.random() * 3) + 5; // Random number between 5 and 7
+            for (let i = 0; i < emojiCount; i++) {
+                let emoji = document.createElement('span');
+                emoji.textContent = '💗';
+                emoji.style.position = 'absolute';
+                emoji.style.left = `${Math.random() * 100}vw`; // Random position across the viewport
+                emoji.style.top = `${Math.random() * 100}vh`;  // Random position across the viewport
+                emoji.style.fontSize = `${Math.random() * 2 + 1}em`; // Random size for fun
+                emoji.style.animation = 'emojiAnim 1s forwards'; // Apply animation to fade in and grow
+                emojiContainer.appendChild(emoji);
+
+                // Remove emoji after animation ends to clean up
+                setTimeout(() => {
+                    emoji.remove();
+                }, 1000); // Remove after 1 second
+            }
+        });
+
+        // Function to teleport "Không" when clicked
+        khongButton.addEventListener('click', function() {
+            // Set new position each time it is clicked
+            let randomX = Math.random() * (window.innerWidth - 100);
+            let randomY = Math.random() * (window.innerHeight - 100);
+
+            khongButton.style.position = 'absolute';
+            khongButton.style.left = randomX + 'px';
+            khongButton.style.top = randomY + 'px';
+            khongButton.style.transition = 'all 1s ease'; // Smooth teleportation
+
+            // Keep the button clickable and teleportable
+            khongButton.style.pointerEvents = 'auto';
+        });
+    </script>
+
+</body>
+</html>
+
